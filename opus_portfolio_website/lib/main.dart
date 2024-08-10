@@ -4,13 +4,55 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final ScrollController _scrollController = ScrollController();
+
+  void _scrollToSection(double position) {
+    _scrollController.animateTo(
+      position,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'My Website',
       home: Scaffold(
+        appBar: AppBar(
+          title: Text('My Website'),
+          actions: [
+            TextButton(
+              onPressed: () => _scrollToSection(0),
+              child: Text(
+                'Home',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            TextButton(
+              onPressed: () => _scrollToSection(700),
+              child: Text(
+                'About',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            TextButton(
+              onPressed: () => _scrollToSection(1200),
+              child: Text(
+                'Experience',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
         body: SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
             children: [
               // Section 1: Photo and Text
@@ -72,58 +114,58 @@ class MyApp extends StatelessWidget {
                 ),
               ),
               // Section 4: Experience
-Container(
-  padding: EdgeInsets.all(50),
-  color: Colors.blue,
-  child: Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Expanded(
-        flex: 1,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Education:',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+              Container(
+                padding: EdgeInsets.all(50),
+                color: Colors.blue,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Education:',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'Experience:',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 50),
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Bachelor of Science in Computer Science\nXYZ University\nGraduation Date: May 2023',
+                            style: TextStyle(fontSize: 18, color: Colors.white),
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'Software Engineer Intern\nABC Company\nJune 2022 - August 2022',
+                            style: TextStyle(fontSize: 18, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Experience:',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
-      SizedBox(width: 50),
-      Expanded(
-        flex: 2,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Bachelor of Science in Computer Science\nXYZ University\nGraduation Date: May 2023',
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Software Engineer Intern\nABC Company\nJune 2022 - August 2022',
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ),
-          ],
-        ),
-      ),
-    ],
-  ),
-),
             ],
           ),
         ),
