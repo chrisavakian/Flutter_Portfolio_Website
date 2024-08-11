@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,6 +14,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final ScrollController _scrollController = ScrollController();
   bool _isDarkMode = false;
+  bool _isHoveringLinkedIn = false;
+  bool _isHoveringGithub = false;
+  bool _isHoveringResume = false;
 
   void _scrollToSection(double position) {
     _scrollController.animateTo(
@@ -28,10 +32,18 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri)) {
+      throw Exception('Could not launch $uri');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final backgroundColor = _isDarkMode ? Colors.grey[900] : Colors.grey[100];
     final textColor = _isDarkMode ? Colors.white : Colors.black;
+    final iconColor = Colors.white; // Fixed to white
 
     return MaterialApp(
       title: 'My Website',
@@ -57,7 +69,7 @@ class _MyAppState extends State<MyApp> {
               ),
               SizedBox(width: 20),
               TextButton(
-                onPressed: () => _scrollToSection(500),
+                onPressed: () => _scrollToSection(750),
                 child: Text(
                   'About',
                   style: TextStyle(
@@ -69,7 +81,7 @@ class _MyAppState extends State<MyApp> {
               ),
               SizedBox(width: 20),
               TextButton(
-                onPressed: () => _scrollToSection(1000),
+                onPressed: () => _scrollToSection(1050),
                 child: Text(
                   'Experience',
                   style: TextStyle(
@@ -117,27 +129,57 @@ class _MyAppState extends State<MyApp> {
                             style: TextStyle(
                               fontSize: 100,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white, // Fixed to white
+                              color: Colors.white,
                             ),
                           ),
                           SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              FaIcon(
-                                FontAwesomeIcons.linkedin,
-                                size: 50,
-                                color: Colors.white, // Fixed to white
+                              // LinkedIn Icon
+                              MouseRegion(
+                                onEnter: (_) => setState(() => _isHoveringLinkedIn = true),
+                                onExit: (_) => setState(() => _isHoveringLinkedIn = false),
+                                child: GestureDetector(
+                                  onTap: () => _launchURL(
+                                      'https://www.linkedin.com/in/christopheravakian2/'),
+                                  child: FaIcon(
+                                    FontAwesomeIcons.linkedin,
+                                    size: 50,
+                                    color: iconColor.withOpacity(
+                                        _isHoveringLinkedIn ? 0.7 : 1.0),
+                                  ),
+                                ),
                               ),
-                              FaIcon(
-                                FontAwesomeIcons.github,
-                                size: 50,
-                                color: Colors.white, // Fixed to white
+                              // GitHub Icon
+                              MouseRegion(
+                                onEnter: (_) => setState(() => _isHoveringGithub = true),
+                                onExit: (_) => setState(() => _isHoveringGithub = false),
+                                child: GestureDetector(
+                                  onTap: () =>
+                                      _launchURL('https://github.com/chrisavakian'),
+                                  child: FaIcon(
+                                    FontAwesomeIcons.github,
+                                    size: 50,
+                                    color: iconColor.withOpacity(
+                                        _isHoveringGithub ? 0.7 : 1.0),
+                                  ),
+                                ),
                               ),
-                              FaIcon(
-                                FontAwesomeIcons.file,
-                                size: 50,
-                                color: Colors.white, // Fixed to white
+                              // Resume Icon (remove this one)
+                              MouseRegion(
+                                onEnter: (_) => setState(() => _isHoveringResume = true),
+                                onExit: (_) => setState(() => _isHoveringResume = false),
+                                child: GestureDetector(
+                                  onTap: () =>
+                                      _launchURL('https://drive.google.com/file/d/1OdC_rRugtUAqyOu7xYnxrGFKyBx9jhT_/view?usp=sharing'),
+                                  child: FaIcon(
+                                    FontAwesomeIcons.file,
+                                    size: 50,
+                                    color: iconColor.withOpacity(
+                                        _isHoveringResume ? 0.7 : 1.0),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -151,9 +193,9 @@ class _MyAppState extends State<MyApp> {
                           icon: Icon(
                             Icons.arrow_downward,
                             size: 40,
-                            color: Colors.white, // Fixed to white
+                            color: Colors.white,
                           ),
-                          onPressed: () => _scrollToSection(500),
+                          onPressed: () => _scrollToSection(750),
                         ),
                       ),
                     ],
@@ -181,11 +223,11 @@ class _MyAppState extends State<MyApp> {
                             style: TextStyle(fontSize: 18, color: textColor),
                             children: [
                               TextSpan(
-                                text: 'About Me: ',
+                                text: 'About Me: \n',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               TextSpan(
-                                text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nulla sit amet aliquam lacinia, nisl nisl aliquam nisl, nec aliquam nisl nisl sit amet nisl. Nullam euismod, nulla sit amet aliquam lacinia, nisl nisl aliquam nisl, nec aliquam nisl nisl sit amet nisl.',
+                                text: 'Test',
                               ),
                             ],
                           ),
@@ -218,7 +260,7 @@ class _MyAppState extends State<MyApp> {
                                 color: textColor,
                               ),
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: 150),
                             Text(
                               'Experience:',
                               style: TextStyle(
@@ -237,12 +279,12 @@ class _MyAppState extends State<MyApp> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Bachelor of Science in Computer Science\nXYZ University\nGraduation Date: May 2023',
+                              'Bachelor of Science in Electrical Engineering and Computer Science\nUC Berkeley\nGraduation Date: May 2024',
                               style: TextStyle(fontSize: 18, color: textColor),
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: 120),
                             Text(
-                              'Software Engineer Intern\nABC Company\nJune 2022 - August 2022',
+                              'Software Engineer Intern\nABC Company\nJune 2022 - August 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\d',
                               style: TextStyle(fontSize: 18, color: textColor),
                             ),
                           ],
