@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
     const iconColor = Colors.white; // Fixed to white
 
     return MaterialApp(
-      title: 'My Website',
+      title: 'Christopher Avakian',
       theme: ThemeData(
         primarySwatch: Colors.grey,
         brightness: _isDarkMode ? Brightness.dark : Brightness.light,
